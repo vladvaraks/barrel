@@ -14,17 +14,22 @@ class SignupForm(UserCreationForm):
         widgets = {
             'username': forms.TextInput(attrs={
                 'class': 'form-control',
-                'placeholder': 'Enter login',
+                'placeholder': 'Введите логин',
             })
         }
 
     def clean_username(self):
         username = self.cleaned_data['username'].lower()
+        if len(username) < 8:
+            raise forms.ValidationError('Логин должен быть больше 8 букв')
         return username
 
     def clean_password2(self):
         password1 = self.cleaned_data['password1']
-        password2 = self.cleaned_data['password1']
+        password2 = self.cleaned_data['password2']
+        
+        print(password1)
+        print(password2)
 
         if not password2:
             raise forms.ValidationError('Поле не может быть пустым!')
@@ -38,11 +43,11 @@ class SignupForm(UserCreationForm):
         super(SignupForm, self).__init__(*args, **kwargs)
         self.fields['password1'].widget = forms.PasswordInput(attrs={
             'class': 'form-control',
-            'placeholder': 'Password'
+            'placeholder': 'Пароль'
         })
         self.fields['password2'].widget = forms.PasswordInput(attrs={
             'class': 'form-control',
-            'placeholder': 'Confirm password'
+            'placeholder': 'Введите еще раз пароль'
         })
 
 
@@ -58,6 +63,7 @@ class SignInForm(AuthenticationForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+
 
     def clean(self):
         username = self.cleaned_data.get('username').lower()

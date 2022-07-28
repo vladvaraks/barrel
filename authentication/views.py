@@ -18,3 +18,4 @@ class Sign_up(CreateView):
     form_class = SignupForm
     template_name = 'authentication/signup.html'
     success_url = reverse_lazy('authentication:signin')
+
