@@ -10,18 +10,23 @@ from users.models import CustomUser
 class SignupForm(UserCreationForm):
     class Meta:
         model = CustomUser
-        fields = ('username', 'password1', 'password2')
+        fields = ('username', 'surname', 'name', 'position', 'password1', 'password2')
         widgets = {
             'username': forms.TextInput(attrs={
-                'class': 'form-control',
                 'placeholder': 'Введите логин',
+            }),
+            'surname': forms.TextInput(attrs={
+                'placeholder': 'Введите фамилию',
+            }),
+            'name': forms.TextInput(attrs={
+                'placeholder': 'Введите имя',
             })
         }
 
     def clean_username(self):
         username = self.cleaned_data['username'].lower()
-        if len(username) < 8:
-            raise forms.ValidationError('Логин должен быть больше 8 букв')
+        #if len(username) < 8:
+        #    raise forms.ValidationError('Логин должен быть больше 8 букв')
         return username
 
     def clean_password2(self):
@@ -42,12 +47,10 @@ class SignupForm(UserCreationForm):
     def __init__(self, *args, **kwargs):
         super(SignupForm, self).__init__(*args, **kwargs)
         self.fields['password1'].widget = forms.PasswordInput(attrs={
-            'class': 'form-control',
             'placeholder': 'Пароль'
         })
         self.fields['password2'].widget = forms.PasswordInput(attrs={
-            'class': 'form-control',
-            'placeholder': 'Введите еще раз пароль'
+            'placeholder': 'Подтверждение пароля'
         })
 
 
@@ -59,7 +62,7 @@ class SignInForm(AuthenticationForm):
     password = forms.CharField(widget=forms.PasswordInput(attrs={
         'class': 'form-control',
         'placeholder': 'Password',
-    }))
+    }))        
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -78,6 +81,7 @@ class SignInForm(AuthenticationForm):
             if self.user_cache is None:
                 raise self.get_invalid_login_error()
             else:
+                self.error_messages['inactive'] = 'Для активации аккаунта обратитесь в службу поддержки.'
                 self.confirm_login_allowed(self.user_cache)
 
         return self.cleaned_data

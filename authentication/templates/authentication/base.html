@@ -15,7 +15,7 @@
         <a href="{% url 'authentication:signup' %}">Регистрация</a> | 
         <a href="{% url 'authentication:signin' %}">Вход</a>
         {% endif %}
-        <div class="row justify-content-center align-items-center">
+        <div class="d-flex justify-content-center align-items-center">
             {% block content %}
             {% endblock %}
           </div>
