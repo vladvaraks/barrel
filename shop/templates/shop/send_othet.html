@@ -1,0 +1,61 @@
+{% extends 'shop/base.html' %}
+
+{% load crispy_forms_tags %}
+
+{% block content %}
+<div class="col"></div>
+<div class="col-10">
+<div class="d-grid gap-2 col-12 mx-auto mt-5">
+    <form method="post">
+        {% csrf_token %}
+        <table class="table table-bordered">
+            <thead>
+              <tr>
+                <th scope="col">Топливо</th>
+                <th scope="col">Замер</th>
+                <th scope="col">Счетчик</th>
+                <th scope="col">Пролив</th>
+              </tr>
+            </thead>
+            <tbody>
+                {% if input_fuel.ai92 %}
+                    <tr>
+                      <th scope="row">АИ-92</th>
+                      <td>{{ form.ai92}}</td>
+                      <td>Otto</td>
+                      <td>@mdo</td>
+                    </tr>
+                {% endif %}
+                {% if input_fuel.ai95 %}
+                    <tr>
+                      <th scope="row">АИ-95</th>
+                      <td>{{ form.ai95}}</td>
+                      <td>Otto</td>
+                      <td>@mdo</td>
+                    </tr>
+                {% endif %}
+                {% if input_fuel.ai98 %}
+                    <tr>
+                      <th scope="row">АИ-98</th>
+                      <td>{{ form.ai98}}</td>
+                      <td>Otto</td>
+                      <td>@mdo</td>
+                    </tr>
+                {% endif %}
+                {% if input_fuel.dt %}
+                    <tr>
+                      <th scope="row">ДТ</th>
+                      <td>{{ form.dt}}</td>
+                      <td>Otto</td>
+                      <td>@mdo</td>
+                    </tr>
+                {% endif %}
+            </tbody>
+          </table>
+        <button type="submit" class="btn btn-primary">Отправить</button>
+      </form>
+      
+</div>
+</div>
+<div class="col"></div>
+{% endblock %}
