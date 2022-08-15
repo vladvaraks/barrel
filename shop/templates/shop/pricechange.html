@@ -4,18 +4,24 @@
 
 {% block content %}
 <h1 class="text-center mb-5 mt-5">Изменение цены на топливо для {{user.shopkey.name}}</h1>
-{% if form.non_field_errors %}
-  <div class="non-field-errors">
-    {% for error in form.non_field_errors %}
-      <p class="form-error">{{ error }}</p>
-    {% endfor %}
+<div class="row">
+  <div class="col-xxl-4 col-xl-4 col-lg-3 col-md-12 col-sm-12 mx-auto"></div>
+  <div class="col-xxl-4 col-xl-4 col-lg-6 col-md-12 col-sm-12 mx-auto">
+      {% if form.non_field_errors %}
+        <div class="alert alert-danger text-center">
+          {% for error in form.non_field_errors %}
+            {{ error }}
+          {% endfor %}
+        </div>
+      {% endif %}
   </div>
-{% endif %}
+  <div class="col-xxl-4 col-xl-4 col-lg-3 col-md-12 col-sm-12 mx-auto"></div>
+</div>  
 <form method="post">
     {% csrf_token %}
     <div class="row">
-      <div class="col-5"></div>
-      <div class="col-xxl-2 col-xl-6 col-lg-6 col-md-12 col-sm-12 mx-auto">
+      <div class="col-xxl-5 col-xl-5 col-lg-4 col-md-12 col-sm-12 mx-auto"></div>
+      <div class="col-xxl-2 col-xl-2 col-lg-4 col-md-12 col-sm-12 mx-auto">
         {{ form.fuel | as_crispy_field }}
         {{ form.date | as_crispy_field }}
         {{ form.price | as_crispy_field }}
@@ -23,7 +29,7 @@
         <button type="submit" class="btn btn-primary mb-5 mt-2">Изменить</button>
         </div>
       </div>
-      <div class="col-5"></div>
+      <div class="col-xxl-5 col-xl-5 col-lg-4 col-md-12 col-sm-12 mx-auto"></div>
     </div>
 </form>
 {% endblock %}

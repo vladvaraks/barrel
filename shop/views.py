@@ -35,7 +35,7 @@ class PriceСhange(FormView):
     def post(self, request, *args, **kwargs):
         form = self.get_form()
         if form.is_valid():
-            date_from_form = datetime.strptime(form.cleaned_data['date'], '%Y-%m-%d') #form.cleaned_data['date']
+            date_from_form = datetime.strptime(form.cleaned_data['date'], '%Y-%m-%d')
             id_maxdate_price = Prices.objects.filter(shopkey=self.request.user.shopkey.internal_code, fuel=form.cleaned_data['fuel'])
             if id_maxdate_price:
                 Prices.objects.filter(pk=id_maxdate_price.latest('start_date').id).update(end_date=date_from_form, surname=self.request.user.surname)

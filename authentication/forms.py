@@ -56,12 +56,12 @@ class SignupForm(UserCreationForm):
 
 class SignInForm(AuthenticationForm):
     username = forms.CharField(widget=forms.TextInput(attrs={
-        'class': 'form-control',
-        'placeholder': 'Email',
+        'class': 'form-control mb-2',
+        'placeholder': 'Логин',
     }))
     password = forms.CharField(widget=forms.PasswordInput(attrs={
-        'class': 'form-control',
-        'placeholder': 'Password',
+        'class': 'form-control mb-2',
+        'placeholder': 'Пароль',
     }))        
 
     def __init__(self, *args, **kwargs):
