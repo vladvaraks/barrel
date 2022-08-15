@@ -15,9 +15,18 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from django.conf import settings
+import debug_toolbar
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('authentication.urls', namespace='authentication')),
     path('shop/', include('shop.urls', namespace='shop')),
 ]
+
+if settings.DEBUG:
+    import mimetypes
+    mimetypes.add_type("application/javascript", ".js", True)
+    urlpatterns = [
+        path('__debug__/', include(debug_toolbar.urls)),
+    ] + urlpatterns

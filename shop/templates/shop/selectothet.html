@@ -3,13 +3,15 @@
 {% load crispy_forms_tags %}
 
 {% block content %}
-<div class="col"></div>
-<div class="col-10">
-<div class="d-grid gap-2 col-5 mx-auto mt-5">
-    <h1 class="text-center mt-5">Выберите действие</h1>
-    <a href="{% url 'shop:othet_change' %}" class="btn btn-success btn-lg mt-2">Заполнить отчет за смену</a>
-    <a href="{% url 'shop:price_change' %}" class="btn btn-warning btn-lg mt-2">Изменить цены</a>
+<div class="row">
+    <div class="col-3"></div>
+    <div class="col-6">
+        <div class="d-grid gap-2 col-5 mx-auto mt-5">
+            <h1 class="text-center mt-5">Выберите действие</h1>
+            <a href="{% url 'shop:othet_change' %}" class="btn btn-success btn-lg mt-2">Заполнить отчет за смену</a>
+            <a href="{% url 'shop:price_change' %}" class="btn btn-warning btn-lg mt-2">Изменить цены</a>
+        </div>
+    </div>
+    <div class="col-3"></div>
 </div>
-</div>
-<div class="col"></div>
 {% endblock %}

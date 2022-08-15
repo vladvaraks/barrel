@@ -1,41 +1,83 @@
 from django import forms
-from django.contrib.admin import widgets 
+from django.contrib.admin import widgets
+from datetime import timedelta
 
-from .models import Prices, ShopFuel
+from .models import *
 from users.models import CustomUser
+from office.models import ShopFuel
 
 
 class DateInput(forms.DateInput):
     input_type = 'date'
 
-class PriceForm(forms.Form):
-    FUEL = [
-        ('АИ-92', 'АИ-92'),
-        ('АИ-95', 'АИ-95'),
-        ('АИ-98', 'АИ-98'),
-        ('ДТ', 'ДТ')
-    ]
+class PriceForm(forms.ModelForm):
     date = forms.CharField(widget=DateInput(), label='Дата окончания')
-    fuel = forms.ChoiceField(choices=FUEL, label='Топливо')
     price = forms.FloatField(label='Новая цена')
 
-    #def clean(self):
-    #    #print(self.__dict__)
-    #    raise forms.ValidationError('Логин должен быть больше 8 букв')
+    class Meta:
+        model = Prices
+        fields = ('fuel', )
+        labels = {'fuel':'Топливо'}
 
-    #def __init__(self, *args, **kwargs):
-    #    self.request = kwargs.pop("request")
-    #    self.user_shopkey = CustomUser.objects.filter(username=self.request.user)
-    #    global create_form
-    #    create_form = ShopFuel.objects.filter(shopkey=self.user_shopkey)
-    #    super(MeasurementForm, self).__init__(*args, **kwargs)
+    def __init__(self, *args, **kwargs):
+        self.request = kwargs.pop('request', None)
+        super(PriceForm, self).__init__(*args, **kwargs)
+        self.fields['fuel'].empty_label = 'Выберите топливо'
 
-class MeasurementForm(forms.Form):
+    def clean(self):
+        allowed_fuel = ShopFuel.objects.filter(shopkey=self.request.user.shopkey).values()[0]
+        if not allowed_fuel[self.cleaned_data['fuel'].slug_name]:
+            raise forms.ValidationError('На данной АЗС не разрешен данный вид топлива, обратитесь в поддержку.')
+            
 
-    ai92 = forms.IntegerField(required = False)
-    ai95 = forms.IntegerField(required = False)
-    ai98 = forms.IntegerField(required = False)
-    dt = forms.IntegerField(required = False)
+    
+class SendingMoneyForm(forms.Form):
+
+    def __init__(self, *args, **kwargs):
+        self.input_money = kwargs.pop('input_money', None)
+        del self.input_money['id'], self.input_money['shopkey_id']
+        labels = {
+            'sdano': 'Cдано', 
+            'fuel_cards': 'Топливные карты', 
+            'sber': 'Сбер', 
+            'benzuber': 'BENZUBER', 
+            'petrol': 'Петрол+', 
+            'e100': 'E-100', 
+            'fuelup': 'FuelUP', 
+            'vedomost': 'Ведомость', 
+            'lnr': 'ЛНР', 
+            'skidka': 'Скидка', 
+            'rashod': 'Расход'
+        }
+        super(SendingMoneyForm, self).__init__(*args, **kwargs)
+        for money, value in self.input_money.items():
+            if value == True:
+                self.fields[f'{money}'] = forms.IntegerField()
+                self.fields[f'{money}'].label = labels[money]
+                self.fields[f'{money}'].widget.attrs['class'] = 'form-control text-center'
+                self.fields[f'{money}'].widget.attrs['placeholder'] = 'Введите значение'
 
 
+class SendingVolumeForm(forms.Form):        
 
+    def __init__(self, *args, **kwargs):
+        self.input_fuel = kwargs.pop('input_fuel', None)
+        self.date_othet = kwargs.pop('date_othet', None)
+        self.request = kwargs.pop('request', None)
+        super(SendingVolumeForm, self).__init__(*args, **kwargs)
+        for fuel, value in self.input_fuel.items():
+            if value == True:
+                self.fields[f'measurement_{fuel}'] = forms.IntegerField()
+                self.fields[f'counter_{fuel}'] = forms.IntegerField()
+                self.fields[f'strait_{fuel}'] = forms.IntegerField()
+        for visible in self.visible_fields():
+            visible.field.widget.attrs['class'] = 'form-control text-center'
+            visible.field.widget.attrs['placeholder'] = 'Введите значение'
+
+    def clean(self):
+        print('SendingVolumeForm')
+        #raise forms.ValidationError('Логин должен быть больше 8 букв')
+    #    yesterday_othet = FuelSelling.objects.filter(shopkey = self.request.user.shopkey,
+    #                                date_othet = self.date_othet - timedelta(days=1)
+    #                                )
+    #    print(yesterday_othet)   

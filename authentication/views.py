@@ -12,10 +12,7 @@ class Sign_in(LoginView):
     
     
     def get_success_url(self):
-        print(CustomUser.objects.all())
-        print(repr(CustomUser.objects.all()))
-        position = CustomUser.objects.filter(username=self.request.user).values_list('position', named=True,)[0].position
-        if position == 'Оператор':
+        if self.request.user.position.position_name == 'Оператор':
             return reverse('shop:shop')
         else:
             return reverse('authentication:signup')

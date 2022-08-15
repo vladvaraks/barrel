@@ -3,59 +3,137 @@
 {% load crispy_forms_tags %}
 
 {% block content %}
-<div class="col"></div>
-<div class="col-10">
-<div class="d-grid gap-2 col-12 mx-auto mt-5">
-    <form method="post">
-        {% csrf_token %}
-        <table class="table table-bordered">
-            <thead>
-              <tr>
-                <th scope="col">Топливо</th>
-                <th scope="col">Замер</th>
-                <th scope="col">Счетчик</th>
-                <th scope="col">Пролив</th>
-              </tr>
-            </thead>
-            <tbody>
-                {% if input_fuel.ai92 %}
+<h1 class="text-center mb-5 mt-5">Отправка отчета за {{forms.SendingVolume.date_othet}}</h1>
+<form method="post">
+    {% csrf_token %}
+    <div class="row">
+        <div class="col-3"></div>
+        <!--div class="col-xxl-6 col-xl-6 col-lg-6 col-md-12 col-sm-12"-->
+        <div class="col-xxl-6 col-xl-6 col-lg-6 col-md-12 col-sm-12 mx-auto">
+            <table class="table table-bordered border-primary text-center align-middle">
+                <thead>
+                  <tr>
+                    <th scope="col">Топливо</th>
+                    <th scope="col">Замер</th>
+                    <th scope="col">Счетчик</th>
+                    <th scope="col">Пролив</th>
+                  </tr>
+                </thead>
+                <tbody>
+                    {% if forms.SendingVolume.input_fuel.ai92 %}
+                        <tr>
+                          <th scope="row">АИ-92</th>
+                          <td>{{ forms.SendingVolume.measurement_ai92}}</td>
+                          <td>{{ forms.SendingVolume.counter_ai92}}</td>
+                          <td>{{ forms.SendingVolume.strait_ai92}}</td>
+                        </tr>
+                    {% endif %}
+                    {% if forms.SendingVolume.input_fuel.ai95 %}
+                        <tr>
+                          <th scope="row">АИ-95</th>
+                          <td>{{ forms.SendingVolume.measurement_ai95}}</td>
+                          <td>{{ forms.SendingVolume.counter_ai95}}</td>
+                          <td>{{ forms.SendingVolume.strait_ai95}}</td>
+                        </tr>
+                    {% endif %}
+                    {% if forms.SendingVolume.input_fuel.ai98 %}
+                        <tr>
+                          <th scope="row">АИ-98</th>
+                          <td>{{ forms.SendingVolume.measurement_ai98 }}</td>
+                          <td>{{ forms.SendingVolume.counter_ai98 }}</td>
+                          <td>{{ forms.SendingVolume.strait_ai98 }}</td>
+                        </tr>
+                    {% endif %}
+                    {% if forms.SendingVolume.input_fuel.dt %}
+                        <tr>
+                          <th scope="row">ДТ</th>
+                          <td>{{ forms.SendingVolume.measurement_dt}}</td>
+                          <td>{{ forms.SendingVolume.counter_dt}}</td>
+                          <td>{{ forms.SendingVolume.strait_dt}}</td>
+                        </tr>
+                    {% endif %}
+                </tbody>
+            </table>
+        </div>
+        <div class="col-3"></div>
+    </div>
+    <br>
+    <div class="row">
+        <div class="col-3"></div>
+        <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-12 col-sm-12 mx-auto">
+          <table class="table table-bordered border-primary text-center align-middle">
+                <thead>
                     <tr>
-                      <th scope="row">АИ-92</th>
-                      <td>{{ form.ai92}}</td>
-                      <td>Otto</td>
-                      <td>@mdo</td>
+                      <th scope="col" colspan="2">Таблица выручки за смену</th>
                     </tr>
-                {% endif %}
-                {% if input_fuel.ai95 %}
+                  </thead>
+                <tbody>
+                    {% for field in forms.SendingMoney %}
                     <tr>
-                      <th scope="row">АИ-95</th>
-                      <td>{{ form.ai95}}</td>
-                      <td>Otto</td>
-                      <td>@mdo</td>
+                      <th class="w-10">{{ field.label }}</th>
+                      <td class="w-10">{{ field }}</td>
                     </tr>
-                {% endif %}
-                {% if input_fuel.ai98 %}
+                    {% endfor %}
+                </tbody>
+            </table>
+            <!--table class="table table-bordered border-primary text-center align-middle">
+                <thead>
                     <tr>
-                      <th scope="row">АИ-98</th>
-                      <td>{{ form.ai98}}</td>
-                      <td>Otto</td>
-                      <td>@mdo</td>
+                      <th scope="col" colspan="2">Таблица выручки за смену</th>
                     </tr>
-                {% endif %}
-                {% if input_fuel.dt %}
-                    <tr>
-                      <th scope="row">ДТ</th>
-                      <td>{{ form.dt}}</td>
-                      <td>Otto</td>
-                      <td>@mdo</td>
-                    </tr>
-                {% endif %}
-            </tbody>
-          </table>
-        <button type="submit" class="btn btn-primary">Отправить</button>
-      </form>
-      
-</div>
-</div>
-<div class="col"></div>
+                  </thead>
+                <tbody>
+                        <tr>
+                          <th class="w-10">Сдано</th>
+                          <td class="w-10">{{ form.sdano }}</td>
+                        </tr>
+                        <tr>
+                          <th>Топливные карты</th>
+                          <td>{{ form.fuel_cards }}</td>
+                        </tr>
+                        <tr>
+                          <th>Сбер</th>
+                          <td>{{ form.sber }}</td>
+                        </tr>
+                        <tr>
+                          <th>Benzuber</th>
+                          <td>{{ form.benzuber }}</td>
+                        </tr>
+                        <tr>
+                            <th>Петрол+</th>
+                            <td>{{ form.petrol }}</td>
+                        </tr>
+                        <tr>
+                            <th>Е-100</th>
+                            <td>{{ form.e100 }}</td>
+                        </tr>
+                        <tr>
+                            <th>FuelUP</th>
+                            <td>{{ form.fuelup }}</td>
+                        </tr>
+                        <tr>
+                            <th>Ведомости</th>
+                            <td>{{ form.vedomost }}</td>
+                        </tr>
+                        <tr>
+                            <th>ЛНР</th>
+                            <td>{{ form.lnr }}</td>
+                        </tr>
+                        <tr>
+                            <th>Скидка</th>
+                            <td>{{ form.skidka }}</td>
+                        </tr>
+                        <tr>
+                            <th>Расход</th>
+                            <td>{{ form.rashod }}</td>
+                        </tr>
+                </tbody>
+            </table-->
+            <div class="d-grid gap-2 col-12 mx-auto">
+                <button type="submit" class="btn btn-primary mb-5 mt-3 btn-lg">Отправить</button>
+            </div>
+        </div>
+        <div class="col-3"></div>
+    </div> 
+</form>
 {% endblock %}
